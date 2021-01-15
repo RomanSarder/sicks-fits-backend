@@ -3,26 +3,15 @@
   "version": "1.0.0",
   "description": "the backend of sick fits",
   "scripts": {
-    "start": "nodemon -e js,graphql -x node src/index.js",
-    "dev": "nodemon -e js,graphql -x node --inspect src/index.js",
+    "dev": "ts-node-dev --transpile-only --no-notify src/app.ts",
     "test": "jest",
-    "deploy": "prisma deploy --env-file variables.env"
+    "build": "tsc"
   },
   "dependencies": {
-    "babel-preset-env": "^1.7.0",
-    "bcryptjs": "2.4.3",
-    "cookie-parser": "^1.4.3",
-    "dotenv": "6.0.0",
-    "graphql": "^0.13.2",
-    "graphql-cli": "^2.16.7",
-    "graphql-yoga": "1.16.2",
-    "jsonwebtoken": "8.3.0",
-    "nodemailer": "^4.6.8",
-    "nodemon": "^1.18.7",
-    "npm-run-all": "^4.1.5",
-    "prisma": "1.17.1",
-    "prisma-binding": "2.1.6",
-    "stripe": "^6.12.1"
+    "@prisma/client": "^2.14.0",
+    "graphql-yoga": "^1.18.3",
+    "nexus": "^1.0.0",
+    "nexus-plugin-prisma": "^0.28.0"
   },
   "license": "MIT",
   "repository": {
@@ -32,5 +21,9 @@
     "presets": [
       "env"
     ]
+  },
+  "devDependencies": {
+    "ts-node-dev": "^1.1.1",
+    "typescript": "^4.1.3"
   }
 }
