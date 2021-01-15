@@ -2,14 +2,28 @@
 ### Do not make changes to this file directly
 
 
-type Dog {
-  name: String!
+scalar DateTime
+
+type Item {
+  createdAt: DateTime!
+  description: String!
+  id: Int!
+  image: String
+  largeImage: String
+  price: Int!
+  title: String!
+  updatedAt: DateTime
+}
+
+input ItemWhereUniqueInput {
+  id: Int
 }
 
 type Mutation {
-  createDog(name: String!): Dog!
+  createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
 }
 
 type Query {
-  dogs: [Dog]!
+  item(where: ItemWhereUniqueInput!): Item
+  items(after: ItemWhereUniqueInput, before: ItemWhereUniqueInput, first: Int, last: Int): [Item!]!
 }

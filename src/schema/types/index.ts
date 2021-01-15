@@ -1,2 +1,2 @@
 /* To be written */
-export * as Dog from './Dog'
+export * as Item from './Item'

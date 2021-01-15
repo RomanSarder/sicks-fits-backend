@@ -7,13 +7,21 @@
 
 
 
-
+declare global {
+  interface NexusGenCustomOutputProperties<TypeName extends string> {
+    crud: NexusPrisma<TypeName, 'crud'>
+    model: NexusPrisma<TypeName, 'model'>
+  }
+}
 
 declare global {
   interface NexusGen extends NexusGenTypes {}
 }
 
 export interface NexusGenInputs {
+  ItemWhereUniqueInput: { // input type
+    id?: number | null; // Int
+  }
 }
 
 export interface NexusGenEnums {
@@ -25,11 +33,19 @@ export interface NexusGenScalars {
   Float: number
   Boolean: boolean
   ID: string
+  DateTime: any
 }
 
 export interface NexusGenObjects {
-  Dog: { // root type
-    name: string; // String!
+  Item: { // root type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description: string; // String!
+    id: number; // Int!
+    image?: string | null; // String
+    largeImage?: string | null; // String
+    price: number; // Int!
+    title: string; // String!
+    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Mutation: {};
   Query: {};
@@ -46,33 +62,64 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Dog: { // field return type
-    name: string; // String!
+  Item: { // field return type
+    createdAt: NexusGenScalars['DateTime']; // DateTime!
+    description: string; // String!
+    id: number; // Int!
+    image: string | null; // String
+    largeImage: string | null; // String
+    price: number; // Int!
+    title: string; // String!
+    updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Mutation: { // field return type
-    createDog: NexusGenRootTypes['Dog']; // Dog!
+    createItem: NexusGenRootTypes['Item']; // Item!
   }
   Query: { // field return type
-    dogs: Array<NexusGenRootTypes['Dog'] | null>; // [Dog]!
+    item: NexusGenRootTypes['Item'] | null; // Item
+    items: NexusGenRootTypes['Item'][]; // [Item!]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Dog: { // field return type name
-    name: 'String'
+  Item: { // field return type name
+    createdAt: 'DateTime'
+    description: 'String'
+    id: 'Int'
+    image: 'String'
+    largeImage: 'String'
+    price: 'Int'
+    title: 'String'
+    updatedAt: 'DateTime'
   }
   Mutation: { // field return type name
-    createDog: 'Dog'
+    createItem: 'Item'
   }
   Query: { // field return type name
-    dogs: 'Dog'
+    item: 'Item'
+    items: 'Item'
   }
 }
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createDog: { // args
-      name: string; // String!
+    createItem: { // args
+      description: string; // String!
+      image?: string | null; // String
+      largeImage?: string | null; // String
+      price: number; // Int!
+      title: string; // String!
+    }
+  }
+  Query: {
+    item: { // args
+      where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
+    }
+    items: { // args
+      after?: NexusGenInputs['ItemWhereUniqueInput'] | null; // ItemWhereUniqueInput
+      before?: NexusGenInputs['ItemWhereUniqueInput'] | null; // ItemWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
     }
   }
 }
@@ -85,7 +132,7 @@ export interface NexusGenTypeInterfaces {
 
 export type NexusGenObjectNames = keyof NexusGenObjects;
 
-export type NexusGenInputNames = never;
+export type NexusGenInputNames = keyof NexusGenInputs;
 
 export type NexusGenEnumNames = never;
 

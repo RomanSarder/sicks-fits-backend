@@ -1,12 +1,10 @@
-// import { PrismaClient } from "@prisma/client";
-
-import {  } from "graphql-yoga/dist/types";
+import { PrismaClient } from "@prisma/client";
 
 export interface Context {
-    prisma: any,
+    prisma: PrismaClient,
     req: Express.Request
 }
 
 export const context = {
-    prisma: {}
+    prisma: new PrismaClient()
 }
