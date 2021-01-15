@@ -28,12 +28,10 @@ export interface NexusGenScalars {
 }
 
 export interface NexusGenObjects {
-  Post: { // root type
-    body?: string | null; // String
-    id?: number | null; // Int
-    published?: string | null; // String
-    title?: string | null; // String
+  Dog: { // root type
+    name: string; // String!
   }
+  Mutation: {};
   Query: {};
 }
 
@@ -48,30 +46,35 @@ export type NexusGenRootTypes = NexusGenObjects
 export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
 
 export interface NexusGenFieldTypes {
-  Post: { // field return type
-    body: string | null; // String
-    id: number | null; // Int
-    published: string | null; // String
-    title: string | null; // String
+  Dog: { // field return type
+    name: string; // String!
+  }
+  Mutation: { // field return type
+    createDog: NexusGenRootTypes['Dog']; // Dog!
   }
   Query: { // field return type
-    ok: boolean; // Boolean!
+    dogs: Array<NexusGenRootTypes['Dog'] | null>; // [Dog]!
   }
 }
 
 export interface NexusGenFieldTypeNames {
-  Post: { // field return type name
-    body: 'String'
-    id: 'Int'
-    published: 'String'
-    title: 'String'
+  Dog: { // field return type name
+    name: 'String'
+  }
+  Mutation: { // field return type name
+    createDog: 'Dog'
   }
   Query: { // field return type name
-    ok: 'Boolean'
+    dogs: 'Dog'
   }
 }
 
 export interface NexusGenArgTypes {
+  Mutation: {
+    createDog: { // args
+      name: string; // String!
+    }
+  }
 }
 
 export interface NexusGenAbstractTypeMembers {

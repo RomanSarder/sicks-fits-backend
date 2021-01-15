@@ -2,13 +2,14 @@
 ### Do not make changes to this file directly
 
 
-type Post {
-  body: String
-  id: Int
-  published: String
-  title: String
+type Dog {
+  name: String!
+}
+
+type Mutation {
+  createDog(name: String!): Dog!
 }
 
 type Query {
-  ok: Boolean!
+  dogs: [Dog]!
 }
