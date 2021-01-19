@@ -74,6 +74,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     createItem: NexusGenRootTypes['Item']; // Item!
+    updateItem: NexusGenRootTypes['Item']; // Item!
   }
   Query: { // field return type
     item: NexusGenRootTypes['Item'] | null; // Item
@@ -94,6 +95,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     createItem: 'Item'
+    updateItem: 'Item'
   }
   Query: { // field return type name
     item: 'Item'
@@ -109,6 +111,14 @@ export interface NexusGenArgTypes {
       largeImage?: string | null; // String
       price: number; // Int!
       title: string; // String!
+    }
+    updateItem: { // args
+      description?: string | null; // String
+      id: number; // Int!
+      image?: string | null; // String
+      largeImage?: string | null; // String
+      price?: number | null; // Int
+      title?: string | null; // String
     }
   }
   Query: {

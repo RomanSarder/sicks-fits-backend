@@ -21,6 +21,7 @@ input ItemWhereUniqueInput {
 
 type Mutation {
   createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
+  updateItem(description: String, id: Int!, image: String, largeImage: String, price: Int, title: String): Item!
 }
 
 type Query {

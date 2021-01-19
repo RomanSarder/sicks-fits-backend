@@ -40,5 +40,31 @@ export const ItemMutation = mutationType({
                 } })
             }
         })
+        t.field('updateItem', {
+            type: nonNull('Item'),
+            args: {
+                id: nonNull(intArg()),
+                title: stringArg(),
+                description: stringArg(),
+                price: intArg(),
+                image: stringArg(),
+                largeImage: stringArg(),
+            },
+            async resolve(_root, args, ctx: Context) {
+                const prisma = ctx.prisma
+                const updatedItem = await prisma.item.update({
+                    where: {
+                        id: args.id
+                    },
+                    data: {
+                        title: args.title as string,
+                        price: args.price as number,
+                        image: args.image,
+                        largeImage: args.largeImage,
+                    }
+                })
+                return updatedItem
+            }
+        })
     }
 })
