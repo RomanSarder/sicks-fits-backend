@@ -1,6 +1,6 @@
 import { objectType, queryType, mutationType, nonNull, stringArg, intArg } from 'nexus'
 import { prismaStrategy } from 'nexus-plugin-prisma/dist/pagination/prisma'
-import { resolveImportPath } from 'nexus/dist/core'
+import { list, resolveImportPath } from 'nexus/dist/core'
 import { Context } from '../../context'
 
 export const Item = objectType({
@@ -19,8 +19,24 @@ export const Item = objectType({
 
 export const ItemQuery = queryType({
     definition(t) {
-        t.crud.items()
         t.crud.item()
+        t.field('items', {
+            type: nonNull(list(nonNull('Item'))),
+            args: {
+                take: intArg(),
+                skip: intArg(),
+            },
+            async resolve(_root, args, ctx: Context) {
+                const prisma = ctx.prisma
+
+                return prisma.item.findMany({
+                    skip: args.skip,
+                    take: args.take,
+
+                })
+            }
+        })
+
         t.field('itemsCount', {
             type: nonNull('Int'),
             async resolve(_root, _args, ctx: Context) {

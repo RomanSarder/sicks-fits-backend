@@ -133,10 +133,8 @@ export interface NexusGenArgTypes {
       where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
     }
     items: { // args
-      after?: NexusGenInputs['ItemWhereUniqueInput'] | null; // ItemWhereUniqueInput
-      before?: NexusGenInputs['ItemWhereUniqueInput'] | null; // ItemWhereUniqueInput
-      first?: number | null; // Int
-      last?: number | null; // Int
+      skip?: number | null; // Int
+      take?: number | null; // Int
     }
   }
 }
