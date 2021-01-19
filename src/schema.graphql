@@ -15,6 +15,10 @@ type Item {
   updatedAt: DateTime
 }
 
+input ItemOrderByInput {
+  createdAt: OrderBy
+}
+
 input ItemWhereUniqueInput {
   id: Int
 }
@@ -25,8 +29,13 @@ type Mutation {
   updateItem(description: String, id: Int!, image: String, largeImage: String, price: Int, title: String): Item!
 }
 
+enum OrderBy {
+  asc
+  desc
+}
+
 type Query {
   item(where: ItemWhereUniqueInput!): Item
-  items(skip: Int, take: Int): [Item!]!
+  items(orderBy: ItemOrderByInput, skip: Int, take: Int): [Item!]!
   itemsCount: Int!
 }

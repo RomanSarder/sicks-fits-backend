@@ -19,12 +19,16 @@ declare global {
 }
 
 export interface NexusGenInputs {
+  ItemOrderByInput: { // input type
+    createdAt?: NexusGenEnums['OrderBy'] | null; // OrderBy
+  }
   ItemWhereUniqueInput: { // input type
     id?: number | null; // Int
   }
 }
 
 export interface NexusGenEnums {
+  OrderBy: "asc" | "desc"
 }
 
 export interface NexusGenScalars {
@@ -59,7 +63,7 @@ export interface NexusGenUnions {
 
 export type NexusGenRootTypes = NexusGenObjects
 
-export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars
+export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnums
 
 export interface NexusGenFieldTypes {
   Item: { // field return type
@@ -133,6 +137,7 @@ export interface NexusGenArgTypes {
       where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
     }
     items: { // args
+      orderBy?: NexusGenInputs['ItemOrderByInput'] | null; // ItemOrderByInput
       skip?: number | null; // Int
       take?: number | null; // Int
     }
@@ -149,7 +154,7 @@ export type NexusGenObjectNames = keyof NexusGenObjects;
 
 export type NexusGenInputNames = keyof NexusGenInputs;
 
-export type NexusGenEnumNames = never;
+export type NexusGenEnumNames = keyof NexusGenEnums;
 
 export type NexusGenInterfaceNames = never;
 

@@ -1,7 +1,21 @@
+import { ItemOrderByInput, Prisma } from '@prisma/client'
 import { objectType, queryType, mutationType, nonNull, stringArg, intArg } from 'nexus'
-import { prismaStrategy } from 'nexus-plugin-prisma/dist/pagination/prisma'
-import { list, resolveImportPath } from 'nexus/dist/core'
+import { arg, enumType, inputObjectType, list } from 'nexus/dist/core'
 import { Context } from '../../context'
+
+export const OrderByEnum = enumType({
+    name: 'OrderBy',
+    members: ['asc', 'desc'],
+})
+
+const ItemOrderByInput = inputObjectType({
+    name: 'ItemOrderByInput',
+    definition (t) {
+        t.field('createdAt', {
+            type: OrderByEnum
+        })
+    }
+})
 
 export const Item = objectType({
     name: 'Item',
@@ -25,14 +39,18 @@ export const ItemQuery = queryType({
             args: {
                 take: intArg(),
                 skip: intArg(),
+                orderBy: arg({
+                    type: ItemOrderByInput,
+                    default: undefined
+                })
             },
             async resolve(_root, args, ctx: Context) {
                 const prisma = ctx.prisma
 
                 return prisma.item.findMany({
-                    skip: args.skip,
-                    take: args.take,
-
+                    skip: args.skip as number | undefined,
+                    take: args.take as number | undefined,
+                    orderBy: args.orderBy as Prisma.ItemOrderByInput
                 })
             }
         })
