@@ -1,4 +1,5 @@
 import { objectType, queryType, mutationType, nonNull, stringArg, intArg } from 'nexus'
+import { resolveImportPath } from 'nexus/dist/core'
 import { Context } from '../../context'
 
 export const Item = objectType({
@@ -64,6 +65,22 @@ export const ItemMutation = mutationType({
                     }
                 })
                 return updatedItem
+            }
+        })
+        t.field('deleteItem', {
+            type: nonNull('Item'),
+            args: {
+                id: nonNull(intArg())
+            },
+            async resolve(_root, args, ctx: Context) {
+                const prisma = ctx.prisma
+                const filter = { where: { id: args.id } }
+                const item = await prisma.item.findUnique(filter)
+                if (item === null) {
+                    throw new Error('Item is not found')
+                }
+                await prisma.item.delete(filter)
+                return item;
             }
         })
     }
