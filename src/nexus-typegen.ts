@@ -80,6 +80,7 @@ export interface NexusGenFieldTypes {
   Query: { // field return type
     item: NexusGenRootTypes['Item'] | null; // Item
     items: NexusGenRootTypes['Item'][]; // [Item!]!
+    itemsCount: number; // Int!
   }
 }
 
@@ -102,6 +103,7 @@ export interface NexusGenFieldTypeNames {
   Query: { // field return type name
     item: 'Item'
     items: 'Item'
+    itemsCount: 'Int'
   }
 }
 

@@ -28,4 +28,5 @@ type Mutation {
 type Query {
   item(where: ItemWhereUniqueInput!): Item
   items(after: ItemWhereUniqueInput, before: ItemWhereUniqueInput, first: Int, last: Int): [Item!]!
+  itemsCount: Int!
 }
