@@ -34,8 +34,26 @@ enum OrderBy {
   desc
 }
 
+enum Permission {
+  ADMIN
+  ITEMCREATE
+  ITEMDELETE
+  ITEMUPDATE
+  PERMISSIONUPDATE
+  USER
+}
+
 type Query {
   item(where: ItemWhereUniqueInput!): Item
   items(orderBy: ItemOrderByInput, skip: Int, take: Int): [Item!]!
   itemsCount: Int!
+}
+
+type User {
+  id: Int!
+  name: String!
+  password: String!
+  permissions: [Permission!]!
+  resetToken: String
+  resetTokenExpiry: Float
 }

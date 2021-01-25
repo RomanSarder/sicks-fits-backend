@@ -2,16 +2,25 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:dev.db"
+  provider = "postgres"
+  url      = env("DATABASE_URL")
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
+enum Permission {
+  ADMIN
+  USER
+  ITEMCREATE
+  ITEMDELETE
+  ITEMUPDATE
+  PERMISSIONUPDATE
+}
+
 model Item {
-  id          Int     @default(autoincrement()) @id
+  id          Int     @id @default(autoincrement())
   title       String
   description String
   image       String?
@@ -20,4 +29,14 @@ model Item {
   createdAt   DateTime @default(now())
   updatedAt   DateTime?
   // user: User
+}
+
+model User {
+  id          Int     @id @default(autoincrement())
+  name        String
+  email       String  @unique
+  password    String
+  resetToken  String?
+  resetTokenExpiry Float?
+  permissions Permission[]
 }

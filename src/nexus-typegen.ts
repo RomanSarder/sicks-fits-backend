@@ -29,6 +29,7 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   OrderBy: "asc" | "desc"
+  Permission: "ADMIN" | "ITEMCREATE" | "ITEMDELETE" | "ITEMUPDATE" | "PERMISSIONUPDATE" | "USER"
 }
 
 export interface NexusGenScalars {
@@ -53,6 +54,14 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  User: { // root type
+    id: number; // Int!
+    name: string; // String!
+    password: string; // String!
+    permissions: NexusGenEnums['Permission'][]; // [Permission!]!
+    resetToken?: string | null; // String
+    resetTokenExpiry?: number | null; // Float
+  }
 }
 
 export interface NexusGenInterfaces {
@@ -86,6 +95,14 @@ export interface NexusGenFieldTypes {
     items: NexusGenRootTypes['Item'][]; // [Item!]!
     itemsCount: number; // Int!
   }
+  User: { // field return type
+    id: number; // Int!
+    name: string; // String!
+    password: string; // String!
+    permissions: NexusGenEnums['Permission'][]; // [Permission!]!
+    resetToken: string | null; // String
+    resetTokenExpiry: number | null; // Float
+  }
 }
 
 export interface NexusGenFieldTypeNames {
@@ -108,6 +125,14 @@ export interface NexusGenFieldTypeNames {
     item: 'Item'
     items: 'Item'
     itemsCount: 'Int'
+  }
+  User: { // field return type name
+    id: 'Int'
+    name: 'String'
+    password: 'String'
+    permissions: 'Permission'
+    resetToken: 'String'
+    resetTokenExpiry: 'Float'
   }
 }
 
