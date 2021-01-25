@@ -2,6 +2,7 @@ import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 import { objectType, enumType, queryType, extendType, stringArg, nonNull } from "nexus";
 import { Context } from "src/context";
+import { Response } from 'express'
 
 export const PermissionEnum = enumType({
     name: 'Permission',
@@ -61,7 +62,7 @@ export const UserMutation = extendType({
                 })
 
                 const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET as string);
-                (res as any).cookie('token', token, {
+                res.cookie('token', token, {
                     httpOnly: true,
                     maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
                 })
