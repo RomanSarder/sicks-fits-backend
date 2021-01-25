@@ -1,6 +1,6 @@
 import { ItemOrderByInput, Prisma } from '@prisma/client'
 import { objectType, queryType, mutationType, nonNull, stringArg, intArg } from 'nexus'
-import { arg, enumType, inputObjectType, list } from 'nexus/dist/core'
+import { arg, enumType, extendType, inputObjectType, list } from 'nexus/dist/core'
 import { Context } from '../../context'
 
 export const OrderByEnum = enumType({
@@ -31,7 +31,8 @@ export const Item = objectType({
     }
 })
 
-export const ItemQuery = queryType({
+export const ItemQuery = extendType({
+    type: 'Query',
     definition(t) {
         t.crud.item()
         t.field('items', {
@@ -65,7 +66,8 @@ export const ItemQuery = queryType({
     }
 })
 
-export const ItemMutation = mutationType({
+export const ItemMutation = extendType({
+    type: 'Mutation',
     definition(t) {
         t.field('createItem', {
             type: nonNull('Item'),

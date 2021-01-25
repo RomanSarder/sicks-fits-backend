@@ -1,4 +1,7 @@
+import cookieParser from 'cookie-parser'
 import { server } from './server'
+
+server.express.use(cookieParser())
 
 server.start({ 
     port: 4444,

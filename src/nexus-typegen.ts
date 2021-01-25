@@ -25,6 +25,10 @@ export interface NexusGenInputs {
   ItemWhereUniqueInput: { // input type
     id?: number | null; // Int
   }
+  UserWhereUniqueInput: { // input type
+    email?: string | null; // String
+    id?: number | null; // Int
+  }
 }
 
 export interface NexusGenEnums {
@@ -88,12 +92,14 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createItem: NexusGenRootTypes['Item']; // Item!
     deleteItem: NexusGenRootTypes['Item']; // Item!
+    signup: NexusGenRootTypes['User'] | null; // User
     updateItem: NexusGenRootTypes['Item']; // Item!
   }
   Query: { // field return type
     item: NexusGenRootTypes['Item'] | null; // Item
     items: NexusGenRootTypes['Item'][]; // [Item!]!
     itemsCount: number; // Int!
+    user: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
     id: number; // Int!
@@ -119,12 +125,14 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createItem: 'Item'
     deleteItem: 'Item'
+    signup: 'User'
     updateItem: 'Item'
   }
   Query: { // field return type name
     item: 'Item'
     items: 'Item'
     itemsCount: 'Int'
+    user: 'User'
   }
   User: { // field return type name
     id: 'Int'
@@ -148,6 +156,11 @@ export interface NexusGenArgTypes {
     deleteItem: { // args
       id: number; // Int!
     }
+    signup: { // args
+      email: string; // String!
+      name: string; // String!
+      password: string; // String!
+    }
     updateItem: { // args
       description?: string | null; // String
       id: number; // Int!
@@ -165,6 +178,9 @@ export interface NexusGenArgTypes {
       orderBy?: NexusGenInputs['ItemOrderByInput'] | null; // ItemOrderByInput
       skip?: number | null; // Int
       take?: number | null; // Int
+    }
+    user: { // args
+      where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
     }
   }
 }

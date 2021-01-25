@@ -26,6 +26,7 @@ input ItemWhereUniqueInput {
 type Mutation {
   createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
   deleteItem(id: Int!): Item!
+  signup(email: String!, name: String!, password: String!): User
   updateItem(description: String, id: Int!, image: String, largeImage: String, price: Int, title: String): Item!
 }
 
@@ -47,6 +48,7 @@ type Query {
   item(where: ItemWhereUniqueInput!): Item
   items(orderBy: ItemOrderByInput, skip: Int, take: Int): [Item!]!
   itemsCount: Int!
+  user(where: UserWhereUniqueInput!): User
 }
 
 type User {
@@ -56,4 +58,9 @@ type User {
   permissions: [Permission!]!
   resetToken: String
   resetTokenExpiry: Float
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: Int
 }

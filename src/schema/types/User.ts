@@ -1,5 +1,7 @@
-import { Permission } from "@prisma/client";
-import { objectType, enumType } from "nexus";
+import bcrypt from 'bcryptjs'
+import jwt from 'jsonwebtoken'
+import { objectType, enumType, queryType, extendType, stringArg, nonNull } from "nexus";
+import { Context } from "src/context";
 
 export const PermissionEnum = enumType({
     name: 'Permission',
@@ -22,5 +24,49 @@ export const User = objectType({
         t.model.resetToken()
         t.model.resetTokenExpiry()
         t.model.permissions()
+    }
+})
+
+export const UserQuery = extendType({
+    type: 'Query',
+    definition(t) {
+        t.crud.user()
+    }
+})
+
+export const UserMutation = extendType({
+    type: 'Mutation',
+    definition(t) {
+        t.field('signup', {
+            type: User,
+            args: {
+                email: nonNull(stringArg()),
+                password: nonNull(stringArg()),
+                name: nonNull(stringArg())
+            },
+            async resolve(_root, args, ctx: Context) {
+                const { prisma, req, res } = ctx
+                const { email, password, name } = args
+
+                const lowercasedEmail: string = email.toLowerCase()
+                const hashedPassword = await bcrypt.hash(password, 10)
+
+                const user = await prisma.user.create({
+                    data: {
+                        email: lowercasedEmail,
+                        password: hashedPassword,
+                        name,
+                        permissions: ['USER']
+                    }
+                })
+
+                const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET as string);
+                (res as any).cookie('token', token, {
+                    httpOnly: true,
+                    maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+                })
+                return user
+            }
+        })
     }
 })
