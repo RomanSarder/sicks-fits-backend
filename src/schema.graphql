@@ -48,6 +48,7 @@ type Query {
   item(where: ItemWhereUniqueInput!): Item
   items(orderBy: ItemOrderByInput, skip: Int, take: Int): [Item!]!
   itemsCount: Int!
+  me: User
   user(where: UserWhereUniqueInput!): User
 }
 

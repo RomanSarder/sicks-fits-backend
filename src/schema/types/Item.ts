@@ -47,7 +47,7 @@ export const ItemQuery = extendType({
             },
             async resolve(_root, args, ctx: Context) {
                 const prisma = ctx.prisma
-
+                const req = ctx.req
                 return prisma.item.findMany({
                     skip: args.skip as number | undefined,
                     take: args.take as number | undefined,

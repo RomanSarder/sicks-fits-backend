@@ -1,8 +1,7 @@
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
-import { objectType, enumType, queryType, extendType, stringArg, nonNull } from "nexus";
+import { objectType, enumType, queryType, extendType, stringArg, nonNull, nullable } from "nexus";
 import { Context } from "src/context";
-import { Response } from 'express'
 
 export const PermissionEnum = enumType({
     name: 'Permission',
@@ -33,6 +32,24 @@ export const UserQuery = extendType({
     type: 'Query',
     definition(t) {
         t.crud.user()
+
+        t.field('me', {
+            type: User,
+            async resolve(_root, _args, ctx: Context) {
+                const { prisma, req, res } = ctx
+                const { userId } = req
+                if (!userId) {
+                    res.status(401)
+                    return null
+                }
+                const user = await prisma.user.findUnique({
+                    where: {
+                        id: userId
+                    }
+                })
+                return user
+            }
+        })
     }
 })
 

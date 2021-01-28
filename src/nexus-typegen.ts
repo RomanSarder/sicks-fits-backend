@@ -100,6 +100,7 @@ export interface NexusGenFieldTypes {
     item: NexusGenRootTypes['Item'] | null; // Item
     items: NexusGenRootTypes['Item'][]; // [Item!]!
     itemsCount: number; // Int!
+    me: NexusGenRootTypes['User'] | null; // User
     user: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
@@ -134,6 +135,7 @@ export interface NexusGenFieldTypeNames {
     item: 'Item'
     items: 'Item'
     itemsCount: 'Int'
+    me: 'User'
     user: 'User'
   }
   User: { // field return type name

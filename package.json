@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "the backend of sick fits",
   "scripts": {
-    "dev": "ts-node-dev --transpile-only --no-notify src/app.ts",
+    "dev": "ts-node-dev --transpile-only --watch=src/**/* --no-notify src/app.ts",
     "test": "jest",
     "build": "tsc"
   },
