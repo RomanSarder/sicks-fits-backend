@@ -59,6 +59,7 @@ export interface NexusGenObjects {
   Mutation: {};
   Query: {};
   User: { // root type
+    email: string; // String!
     id: number; // Int!
     name: string; // String!
     password: string; // String!
@@ -102,6 +103,7 @@ export interface NexusGenFieldTypes {
     user: NexusGenRootTypes['User'] | null; // User
   }
   User: { // field return type
+    email: string; // String!
     id: number; // Int!
     name: string; // String!
     password: string; // String!
@@ -135,6 +137,7 @@ export interface NexusGenFieldTypeNames {
     user: 'User'
   }
   User: { // field return type name
+    email: 'String'
     id: 'Int'
     name: 'String'
     password: 'String'
