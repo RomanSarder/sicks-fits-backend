@@ -162,7 +162,6 @@ export const UserMutation = extendType({
                         resetTokenExpiry
                     }
                 })
-                console.log(res)
                 return {
                     message: 'Success'
                 }
