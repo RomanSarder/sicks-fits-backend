@@ -65,10 +65,7 @@ export interface NexusGenObjects {
     email: string; // String!
     id: number; // Int!
     name: string; // String!
-    password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
-    resetToken?: string | null; // String
-    resetTokenExpiry?: number | null; // Float
   }
 }
 
@@ -96,6 +93,8 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createItem: NexusGenRootTypes['Item']; // Item!
     deleteItem: NexusGenRootTypes['Item']; // Item!
+    requestPasswordReset: NexusGenRootTypes['SucessMessage'] | null; // SucessMessage
+    resetPassword: NexusGenRootTypes['User'] | null; // User
     signin: NexusGenRootTypes['User'] | null; // User
     signout: NexusGenRootTypes['SucessMessage'] | null; // SucessMessage
     signup: NexusGenRootTypes['User'] | null; // User
@@ -115,10 +114,7 @@ export interface NexusGenFieldTypes {
     email: string; // String!
     id: number; // Int!
     name: string; // String!
-    password: string; // String!
     permissions: NexusGenEnums['Permission'][]; // [Permission!]!
-    resetToken: string | null; // String
-    resetTokenExpiry: number | null; // Float
   }
 }
 
@@ -136,6 +132,8 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createItem: 'Item'
     deleteItem: 'Item'
+    requestPasswordReset: 'SucessMessage'
+    resetPassword: 'User'
     signin: 'User'
     signout: 'SucessMessage'
     signup: 'User'
@@ -155,10 +153,7 @@ export interface NexusGenFieldTypeNames {
     email: 'String'
     id: 'Int'
     name: 'String'
-    password: 'String'
     permissions: 'Permission'
-    resetToken: 'String'
-    resetTokenExpiry: 'Float'
   }
 }
 
@@ -173,6 +168,14 @@ export interface NexusGenArgTypes {
     }
     deleteItem: { // args
       id: number; // Int!
+    }
+    requestPasswordReset: { // args
+      email: string; // String!
+    }
+    resetPassword: { // args
+      confirmPassword: string; // String!
+      password: string; // String!
+      resetToken: string; // String!
     }
     signin: { // args
       email: string; // String!

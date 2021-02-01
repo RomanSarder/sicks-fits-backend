@@ -26,6 +26,8 @@ input ItemWhereUniqueInput {
 type Mutation {
   createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
   deleteItem(id: Int!): Item!
+  requestPasswordReset(email: String!): SucessMessage
+  resetPassword(confirmPassword: String!, password: String!, resetToken: String!): User
   signin(email: String!, password: String!): User
   signout: SucessMessage
   signup(email: String!, name: String!, password: String!): User
@@ -62,10 +64,7 @@ type User {
   email: String!
   id: Int!
   name: String!
-  password: String!
   permissions: [Permission!]!
-  resetToken: String
-  resetTokenExpiry: Float
 }
 
 input UserWhereUniqueInput {

@@ -1,8 +1,19 @@
 import bcrypt from 'bcryptjs'
+import { Response } from 'express'
 import jwt from 'jsonwebtoken'
-import { objectType, enumType, queryType, extendType, stringArg, nonNull, nullable } from "nexus";
+import { randomBytes } from 'crypto'
+import { promisify } from 'util'
+import { objectType, enumType, extendType, stringArg, nonNull } from "nexus";
 import { Context } from "src/context";
 import { SuccessMessage } from './common';
+
+function setToken (userId: number, res: Response) {
+    const token = jwt.sign({ userId }, process.env.APP_SECRET as string);
+    res.cookie('token', token, {
+        httpOnly: true,
+        maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
+    })
+}
 
 export const PermissionEnum = enumType({
     name: 'Permission',
@@ -22,9 +33,6 @@ export const User = objectType({
         t.model.id()
         t.model.email()
         t.model.name()
-        t.model.password()
-        t.model.resetToken()
-        t.model.resetTokenExpiry()
         t.model.permissions()
     }
 })
@@ -79,11 +87,8 @@ export const UserMutation = extendType({
                     }
                 })
 
-                const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET as string);
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
-                })
+                setToken(user.id, res)
+
                 return user
             }
         })
@@ -115,11 +120,8 @@ export const UserMutation = extendType({
                     throw new Error('Invalid password')
                 }
 
-                const token = jwt.sign({ userId: user.id }, process.env.APP_SECRET as string);
-                res.cookie('token', token, {
-                    httpOnly: true,
-                    maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
-                })
+                setToken(user.id, res)
+
                 return user
             }
         })
@@ -129,6 +131,87 @@ export const UserMutation = extendType({
             async resolve (_root, _args, ctx: Context) {
                 ctx.res.clearCookie('token')
                 return { message: 'Goodbye!' }
+            }
+        })
+
+        t.field('requestPasswordReset', {
+            type: SuccessMessage,
+            args: {
+                email: nonNull(stringArg())
+            },
+            async resolve (_root, args, ctx: Context) {
+                const { email } = args
+                const user = await ctx.prisma.user.findFirst({
+                    where: {
+                        email: email.toLowerCase()
+                    }
+                })
+
+                if (user === null) {
+                    throw new Error(`No such user found for email ${email}`)
+                }
+                const randomBytesPromise = promisify(randomBytes)
+                const resetToken = (await randomBytesPromise(20)).toString('hex')
+                const resetTokenExpiry = Date.now() + 3600000 // 1 hour from now
+                const res = await ctx.prisma.user.update({
+                    where: {
+                        email: email.toLowerCase()
+                    },
+                    data: {
+                        resetToken,
+                        resetTokenExpiry
+                    }
+                })
+                console.log(res)
+                return {
+                    message: 'Success'
+                }
+            }
+        })
+
+        t.field('resetPassword', {
+            type: User,
+            args: {
+                resetToken: nonNull(stringArg()),
+                password: nonNull(stringArg()),
+                confirmPassword: nonNull(stringArg())
+            },
+
+            async resolve (_root, args, ctx: Context) {
+                const { resetToken, password, confirmPassword } = args
+                const { prisma, res } = ctx
+
+                if (password !== confirmPassword) {
+                    throw new Error('Passwords don\'t match')
+                }
+
+                const user = await prisma.user.findFirst({
+                    where: {
+                        resetToken,
+                        resetTokenExpiry: {
+                            gt: Date.now() - 3600000
+                        },
+                    }
+                })
+
+                if (user === null) {
+                    throw new Error('Reset token is invalid or expired')
+                }
+
+                const newPassword = await bcrypt.hash(password, 10)
+                const newUser = await prisma.user.update({
+                    where: {
+                        id: user.id
+                    },
+                    data: {
+                        password: newPassword,
+                        resetToken: null,
+                        resetTokenExpiry: null
+                    }
+                })
+                setToken(user.id, res)
+
+                return newUser
             }
         })
     }
