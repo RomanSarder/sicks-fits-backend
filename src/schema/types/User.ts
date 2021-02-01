@@ -40,7 +40,6 @@ export const UserQuery = extendType({
                 const { prisma, req, res } = ctx
                 const { userId } = req
                 if (!userId) {
-                    res.status(401)
                     return null
                 }
                 const user = await prisma.user.findUnique({
@@ -129,7 +128,7 @@ export const UserMutation = extendType({
             type: SuccessMessage,
             async resolve (_root, _args, ctx: Context) {
                 ctx.res.clearCookie('token')
-                return { messaeg: 'Goodbye!' }
+                return { message: 'Goodbye!' }
             }
         })
     }
