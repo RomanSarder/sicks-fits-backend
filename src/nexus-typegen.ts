@@ -58,6 +58,9 @@ export interface NexusGenObjects {
   }
   Mutation: {};
   Query: {};
+  SucessMessage: { // root type
+    message?: string | null; // String
+  }
   User: { // root type
     email: string; // String!
     id: number; // Int!
@@ -93,6 +96,8 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     createItem: NexusGenRootTypes['Item']; // Item!
     deleteItem: NexusGenRootTypes['Item']; // Item!
+    signin: NexusGenRootTypes['User'] | null; // User
+    signout: NexusGenRootTypes['SucessMessage'] | null; // SucessMessage
     signup: NexusGenRootTypes['User'] | null; // User
     updateItem: NexusGenRootTypes['Item']; // Item!
   }
@@ -102,6 +107,9 @@ export interface NexusGenFieldTypes {
     itemsCount: number; // Int!
     me: NexusGenRootTypes['User'] | null; // User
     user: NexusGenRootTypes['User'] | null; // User
+  }
+  SucessMessage: { // field return type
+    message: string | null; // String
   }
   User: { // field return type
     email: string; // String!
@@ -128,6 +136,8 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     createItem: 'Item'
     deleteItem: 'Item'
+    signin: 'User'
+    signout: 'SucessMessage'
     signup: 'User'
     updateItem: 'Item'
   }
@@ -137,6 +147,9 @@ export interface NexusGenFieldTypeNames {
     itemsCount: 'Int'
     me: 'User'
     user: 'User'
+  }
+  SucessMessage: { // field return type name
+    message: 'String'
   }
   User: { // field return type name
     email: 'String'
@@ -160,6 +173,10 @@ export interface NexusGenArgTypes {
     }
     deleteItem: { // args
       id: number; // Int!
+    }
+    signin: { // args
+      email: string; // String!
+      password: string; // String!
     }
     signup: { // args
       email: string; // String!
