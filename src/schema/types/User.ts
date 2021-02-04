@@ -6,6 +6,7 @@ import { promisify } from 'util'
 import { objectType, enumType, extendType, stringArg, nonNull } from "nexus";
 import { Context } from "src/context";
 import { SuccessMessage } from './common';
+import { sendPasswordResetEmail } from '../../lib/email'
 
 function setToken (userId: number, res: Response) {
     const token = jwt.sign({ userId }, process.env.APP_SECRET as string);
@@ -153,7 +154,7 @@ export const UserMutation = extendType({
                 const randomBytesPromise = promisify(randomBytes)
                 const resetToken = (await randomBytesPromise(20)).toString('hex')
                 const resetTokenExpiry = Date.now() + 3600000 // 1 hour from now
-                const res = await ctx.prisma.user.update({
+                await ctx.prisma.user.update({
                     where: {
                         email: email.toLowerCase()
                     },
@@ -162,6 +163,9 @@ export const UserMutation = extendType({
                         resetTokenExpiry
                     }
                 })
+
+                await sendPasswordResetEmail(resetToken, email)
+
                 return {
                     message: 'Success'
                 }
