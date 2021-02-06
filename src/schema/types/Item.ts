@@ -78,10 +78,17 @@ export const ItemQuery = extendType({
 
                 return prisma.item.findMany({
                     where: {
-                        title: {
-                            contains: searchString,
-                            mode: "insensitive",
-                        }
+                        OR: [{
+                            title: {
+                                contains: searchString,
+                                mode: 'insensitive'
+                            },
+                        }, {
+                            description: {
+                                contains: searchString,
+                                mode: 'insensitive'
+                            }
+                        }]
                     }
                 })
             }
