@@ -105,6 +105,7 @@ export interface NexusGenFieldTypes {
     items: NexusGenRootTypes['Item'][]; // [Item!]!
     itemsCount: number; // Int!
     me: NexusGenRootTypes['User'] | null; // User
+    searchItems: NexusGenRootTypes['Item'][] | null; // [Item!]
     user: NexusGenRootTypes['User'] | null; // User
   }
   SucessMessage: { // field return type
@@ -144,6 +145,7 @@ export interface NexusGenFieldTypeNames {
     items: 'Item'
     itemsCount: 'Int'
     me: 'User'
+    searchItems: 'Item'
     user: 'User'
   }
   SucessMessage: { // field return type name
@@ -201,8 +203,12 @@ export interface NexusGenArgTypes {
     }
     items: { // args
       orderBy?: NexusGenInputs['ItemOrderByInput'] | null; // ItemOrderByInput
+      search?: string | null; // String
       skip?: number | null; // Int
       take?: number | null; // Int
+    }
+    searchItems: { // args
+      searchString: string; // String!
     }
     user: { // args
       where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!

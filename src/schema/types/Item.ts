@@ -43,16 +43,19 @@ export const ItemQuery = extendType({
                 orderBy: arg({
                     type: ItemOrderByInput,
                     default: undefined
-                })
+                }),
+                search: stringArg()
             },
             async resolve(_root, args, ctx: Context) {
                 const prisma = ctx.prisma
                 const req = ctx.req
-                return prisma.item.findMany({
+                const queryOptions = {
                     skip: args.skip as number | undefined,
                     take: args.take as number | undefined,
-                    orderBy: args.orderBy as Prisma.ItemOrderByInput
-                })
+                    orderBy: args.orderBy as Prisma.ItemOrderByInput,
+                }
+
+                return prisma.item.findMany(queryOptions)
             }
         })
 
@@ -61,6 +64,26 @@ export const ItemQuery = extendType({
             async resolve(_root, _args, ctx: Context) {
                 const prisma = ctx.prisma
                 return await prisma.item.count()
+            }
+        })
+
+        t.field('searchItems', {
+            type: list(nonNull(Item)),
+            args: {
+                searchString: nonNull(stringArg())
+            },
+            async resolve(_root, args, ctx: Context) {
+                const prisma = ctx.prisma
+                const { searchString } = args
+
+                return prisma.item.findMany({
+                    where: {
+                        title: {
+                            contains: searchString,
+                            mode: "insensitive",
+                        }
+                    }
+                })
             }
         })
     }
