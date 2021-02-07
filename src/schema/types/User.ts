@@ -3,10 +3,12 @@ import { Response } from 'express'
 import jwt from 'jsonwebtoken'
 import { randomBytes } from 'crypto'
 import { promisify } from 'util'
-import { objectType, enumType, extendType, stringArg, nonNull } from "nexus";
+import { objectType, enumType, extendType, stringArg, nonNull, list, intArg } from "nexus";
 import { Context } from "src/context";
 import { SuccessMessage } from './common';
 import { sendPasswordResetEmail } from '../../lib/email'
+import { CartItem } from './CartItem'
+import { User } from '@prisma/client'
 
 function setToken (userId: number, res: Response) {
     const token = jwt.sign({ userId }, process.env.APP_SECRET as string);
@@ -35,6 +37,7 @@ export const User = objectType({
         t.model.email()
         t.model.name()
         t.model.permissions()
+        t.model.cart()
     }
 })
 
@@ -57,6 +60,37 @@ export const UserQuery = extendType({
                     }
                 })
                 return user
+            }
+        })
+
+        t.field('getMyCart', {
+            type: list(CartItem),
+            async resolve(_root, _args, ctx: Context) {
+                const { prisma, req } = ctx
+                const { userId } = req
+
+                if (!userId) {
+                    return null
+                }
+
+                const result = await prisma.user.findUnique({
+                    where: {
+                        id: userId
+                    },
+                    select: {
+                        cart: {
+                            include: {
+                                item: true
+                            }
+                        }
+                    }
+                })
+
+                if (result === null) {
+                    return null
+                } else {
+                    return result.cart
+                }
             }
         })
     }

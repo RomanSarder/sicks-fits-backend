@@ -2,12 +2,50 @@
 ### Do not make changes to this file directly
 
 
+type CartItem {
+  id: Int!
+  item: Item!
+  quantity: Int!
+  user: User!
+}
+
+input CartItemCreateInput {
+  item: ItemCreateOneWithoutCartItemInput!
+  quantity: Int
+  user: UserCreateOneWithoutCartInput!
+}
+
+input CartItemWhereUniqueInput {
+  id: Int
+}
+
 scalar DateTime
 
 type Item {
   createdAt: DateTime!
   description: String!
   id: Int!
+  image: String
+  largeImage: String
+  price: Int!
+  title: String!
+  updatedAt: DateTime
+}
+
+input ItemCreateOneWithoutCartItemInput {
+  connect: ItemWhereUniqueInput
+  connectOrCreate: ItemCreateOrConnectWithoutCartItemInput
+  create: ItemCreateWithoutCartItemInput
+}
+
+input ItemCreateOrConnectWithoutCartItemInput {
+  create: ItemCreateWithoutCartItemInput!
+  where: ItemWhereUniqueInput!
+}
+
+input ItemCreateWithoutCartItemInput {
+  createdAt: DateTime
+  description: String!
   image: String
   largeImage: String
   price: Int!
@@ -24,6 +62,7 @@ input ItemWhereUniqueInput {
 }
 
 type Mutation {
+  createCartItem(data: CartItemCreateInput!): CartItem!
   createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
   deleteItem(id: Int!): Item!
   requestPasswordReset(email: String!): SucessMessage
@@ -49,6 +88,7 @@ enum Permission {
 }
 
 type Query {
+  getMyCart(userId: Int): [CartItem]
   item(where: ItemWhereUniqueInput!): Item
   items(orderBy: ItemOrderByInput, search: String, skip: Int, take: Int): [Item!]!
   itemsCount: Int!
@@ -62,10 +102,35 @@ type SucessMessage {
 }
 
 type User {
+  cart(after: CartItemWhereUniqueInput, before: CartItemWhereUniqueInput, first: Int, last: Int): [CartItem!]!
   email: String!
   id: Int!
   name: String!
   permissions: [Permission!]!
+}
+
+input UserCreateOneWithoutCartInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutcartInput
+  create: UserCreateWithoutCartInput
+}
+
+input UserCreateOrConnectWithoutcartInput {
+  create: UserCreateWithoutCartInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreatepermissionsInput {
+  set: [Permission!]
+}
+
+input UserCreateWithoutCartInput {
+  email: String!
+  name: String!
+  password: String!
+  permissions: UserCreatepermissionsInput
+  resetToken: String
+  resetTokenExpiry: Float
 }
 
 input UserWhereUniqueInput {

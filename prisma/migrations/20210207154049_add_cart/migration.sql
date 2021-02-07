@@ -1,0 +1,15 @@
+-- CreateTable
+CREATE TABLE "CartItem" (
+"id" SERIAL,
+    "quantity" INTEGER NOT NULL DEFAULT 1,
+    "itemId" INTEGER NOT NULL,
+    "userId" INTEGER NOT NULL,
+
+    PRIMARY KEY ("id")
+);
+
+-- AddForeignKey
+ALTER TABLE "CartItem" ADD FOREIGN KEY("itemId")REFERENCES "Item"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "CartItem" ADD FOREIGN KEY("userId")REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
