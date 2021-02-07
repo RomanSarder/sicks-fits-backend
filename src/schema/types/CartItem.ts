@@ -1,4 +1,4 @@
-import { intArg, mutationType, nonNull, objectType } from "nexus";
+import { intArg, mutationType, nonNull, objectType, stringArg } from "nexus";
 import { Context } from "src/context";
 
 export const CartItem = objectType({
@@ -60,6 +60,53 @@ export const CartMutations = mutationType({
                     }
                 })
             } 
+        })
+        t.field('deleteCartItem', {
+            type: Int,
+            args: {
+                itemId: nonNull(intArg()),
+                userId: nonNull(intArg()),
+            },
+            async resolve(_root, args, ctx: Context) {
+                const { prisma, req } = ctx
+                const { itemId, userId } = args
+                // const { userId } = req
+                const targetItem = await prisma.item.findUnique({
+                    where: {
+                        id: itemId
+                    }
+                })
+
+                if (targetItem === null) {
+                    throw new Error('Unable to find item with this id')
+                }
+
+                const targetCartItemFilter = {
+                    itemId_userId: {
+                        itemId,
+                        userId
+                    }
+                }
+
+                const cartItem = await prisma.cartItem.findUnique({
+                    where: targetCartItemFilter
+                })
+
+                if (cartItem?.quantity === 1) {
+                    return prisma.cartItem.delete({
+                        where: targetCartItemFilter
+                    })
+                } else {
+                    return prisma.cartItem.update({
+                        where: targetCartItemFilter,
+                        data: {
+                            quantity: {
+                                decrement: 1
+                            }
+                        }
+                    })
+                }
+            }
         })
     }
 })

@@ -112,6 +112,7 @@ export interface NexusGenFieldTypes {
   Mutation: { // field return type
     addToCart: NexusGenRootTypes['CartItem'] | null; // CartItem
     createItem: NexusGenRootTypes['Item']; // Item!
+    deleteCartItem: NexusGenRootTypes['CartItem'] | null; // CartItem
     deleteItem: NexusGenRootTypes['Item']; // Item!
     requestPasswordReset: NexusGenRootTypes['SucessMessage'] | null; // SucessMessage
     resetPassword: NexusGenRootTypes['User'] | null; // User
@@ -162,6 +163,7 @@ export interface NexusGenFieldTypeNames {
   Mutation: { // field return type name
     addToCart: 'CartItem'
     createItem: 'Item'
+    deleteCartItem: 'CartItem'
     deleteItem: 'Item'
     requestPasswordReset: 'SucessMessage'
     resetPassword: 'User'
@@ -202,6 +204,10 @@ export interface NexusGenArgTypes {
       largeImage?: string | null; // String
       price: number; // Int!
       title: string; // String!
+    }
+    deleteCartItem: { // args
+      itemId: number; // Int!
+      userId: number; // Int!
     }
     deleteItem: { // args
       id: number; // Int!

@@ -43,6 +43,7 @@ input ItemWhereUniqueInput {
 type Mutation {
   addToCart(itemId: Int!): CartItem
   createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
+  deleteCartItem(itemId: Int!, userId: Int!): CartItem
   deleteItem(id: Int!): Item!
   requestPasswordReset(email: String!): SucessMessage
   resetPassword(confirmPassword: String!, password: String!, resetToken: String!): User
