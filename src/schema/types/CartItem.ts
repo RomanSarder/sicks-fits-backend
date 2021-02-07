@@ -62,15 +62,14 @@ export const CartMutations = mutationType({
             } 
         })
         t.field('deleteCartItem', {
-            type: Int,
+            type: nonNull(CartItem),
             args: {
                 itemId: nonNull(intArg()),
-                userId: nonNull(intArg()),
             },
             async resolve(_root, args, ctx: Context) {
                 const { prisma, req } = ctx
-                const { itemId, userId } = args
-                // const { userId } = req
+                const { itemId } = args
+                const { userId } = req
                 const targetItem = await prisma.item.findUnique({
                     where: {
                         id: itemId
