@@ -19,57 +19,18 @@ declare global {
 }
 
 export interface NexusGenInputs {
-  CartItemCreateInput: { // input type
-    item: NexusGenInputs['ItemCreateOneWithoutCartItemInput']; // ItemCreateOneWithoutCartItemInput!
-    quantity?: number | null; // Int
-    user: NexusGenInputs['UserCreateOneWithoutCartInput']; // UserCreateOneWithoutCartInput!
+  CartItemItemIdUserIdCompoundUniqueInput: { // input type
+    itemId: number; // Int!
+    userId: number; // Int!
   }
   CartItemWhereUniqueInput: { // input type
-    id?: number | null; // Int
-  }
-  ItemCreateOneWithoutCartItemInput: { // input type
-    connect?: NexusGenInputs['ItemWhereUniqueInput'] | null; // ItemWhereUniqueInput
-    connectOrCreate?: NexusGenInputs['ItemCreateOrConnectWithoutCartItemInput'] | null; // ItemCreateOrConnectWithoutCartItemInput
-    create?: NexusGenInputs['ItemCreateWithoutCartItemInput'] | null; // ItemCreateWithoutCartItemInput
-  }
-  ItemCreateOrConnectWithoutCartItemInput: { // input type
-    create: NexusGenInputs['ItemCreateWithoutCartItemInput']; // ItemCreateWithoutCartItemInput!
-    where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
-  }
-  ItemCreateWithoutCartItemInput: { // input type
-    createdAt?: NexusGenScalars['DateTime'] | null; // DateTime
-    description: string; // String!
-    image?: string | null; // String
-    largeImage?: string | null; // String
-    price: number; // Int!
-    title: string; // String!
-    updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
+    itemId_userId?: NexusGenInputs['CartItemItemIdUserIdCompoundUniqueInput'] | null; // CartItemItemIdUserIdCompoundUniqueInput
   }
   ItemOrderByInput: { // input type
     createdAt?: NexusGenEnums['OrderBy'] | null; // OrderBy
   }
   ItemWhereUniqueInput: { // input type
     id?: number | null; // Int
-  }
-  UserCreateOneWithoutCartInput: { // input type
-    connect?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
-    connectOrCreate?: NexusGenInputs['UserCreateOrConnectWithoutcartInput'] | null; // UserCreateOrConnectWithoutcartInput
-    create?: NexusGenInputs['UserCreateWithoutCartInput'] | null; // UserCreateWithoutCartInput
-  }
-  UserCreateOrConnectWithoutcartInput: { // input type
-    create: NexusGenInputs['UserCreateWithoutCartInput']; // UserCreateWithoutCartInput!
-    where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
-  }
-  UserCreateWithoutCartInput: { // input type
-    email: string; // String!
-    name: string; // String!
-    password: string; // String!
-    permissions?: NexusGenInputs['UserCreatepermissionsInput'] | null; // UserCreatepermissionsInput
-    resetToken?: string | null; // String
-    resetTokenExpiry?: number | null; // Float
-  }
-  UserCreatepermissionsInput: { // input type
-    set?: NexusGenEnums['Permission'][] | null; // [Permission!]
   }
   UserWhereUniqueInput: { // input type
     email?: string | null; // String
@@ -93,8 +54,9 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   CartItem: { // root type
-    id: number; // Int!
+    itemId: number; // Int!
     quantity: number; // Int!
+    userId: number; // Int!
   }
   Item: { // root type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -131,10 +93,11 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   CartItem: { // field return type
-    id: number; // Int!
     item: NexusGenRootTypes['Item']; // Item!
+    itemId: number; // Int!
     quantity: number; // Int!
     user: NexusGenRootTypes['User']; // User!
+    userId: number; // Int!
   }
   Item: { // field return type
     createdAt: NexusGenScalars['DateTime']; // DateTime!
@@ -147,7 +110,7 @@ export interface NexusGenFieldTypes {
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
   }
   Mutation: { // field return type
-    createCartItem: NexusGenRootTypes['CartItem']; // CartItem!
+    addToCart: NexusGenRootTypes['CartItem'] | null; // CartItem
     createItem: NexusGenRootTypes['Item']; // Item!
     deleteItem: NexusGenRootTypes['Item']; // Item!
     requestPasswordReset: NexusGenRootTypes['SucessMessage'] | null; // SucessMessage
@@ -180,10 +143,11 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   CartItem: { // field return type name
-    id: 'Int'
     item: 'Item'
+    itemId: 'Int'
     quantity: 'Int'
     user: 'User'
+    userId: 'Int'
   }
   Item: { // field return type name
     createdAt: 'DateTime'
@@ -196,7 +160,7 @@ export interface NexusGenFieldTypeNames {
     updatedAt: 'DateTime'
   }
   Mutation: { // field return type name
-    createCartItem: 'CartItem'
+    addToCart: 'CartItem'
     createItem: 'Item'
     deleteItem: 'Item'
     requestPasswordReset: 'SucessMessage'
@@ -229,8 +193,8 @@ export interface NexusGenFieldTypeNames {
 
 export interface NexusGenArgTypes {
   Mutation: {
-    createCartItem: { // args
-      data: NexusGenInputs['CartItemCreateInput']; // CartItemCreateInput!
+    addToCart: { // args
+      itemId: number; // Int!
     }
     createItem: { // args
       description: string; // String!
@@ -269,9 +233,6 @@ export interface NexusGenArgTypes {
     }
   }
   Query: {
-    getMyCart: { // args
-      userId?: number | null; // Int
-    }
     item: { // args
       where: NexusGenInputs['ItemWhereUniqueInput']; // ItemWhereUniqueInput!
     }
