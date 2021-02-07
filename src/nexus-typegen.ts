@@ -24,6 +24,7 @@ export interface NexusGenInputs {
     userId: number; // Int!
   }
   CartItemWhereUniqueInput: { // input type
+    id?: number | null; // Int
     itemId_userId?: NexusGenInputs['CartItemItemIdUserIdCompoundUniqueInput'] | null; // CartItemItemIdUserIdCompoundUniqueInput
   }
   ItemOrderByInput: { // input type
@@ -54,6 +55,7 @@ export interface NexusGenScalars {
 
 export interface NexusGenObjects {
   CartItem: { // root type
+    id: number; // Int!
     itemId: number; // Int!
     quantity: number; // Int!
     userId: number; // Int!
@@ -93,6 +95,7 @@ export type NexusGenAllTypes = NexusGenRootTypes & NexusGenScalars & NexusGenEnu
 
 export interface NexusGenFieldTypes {
   CartItem: { // field return type
+    id: number; // Int!
     item: NexusGenRootTypes['Item']; // Item!
     itemId: number; // Int!
     quantity: number; // Int!
@@ -144,6 +147,7 @@ export interface NexusGenFieldTypes {
 
 export interface NexusGenFieldTypeNames {
   CartItem: { // field return type name
+    id: 'Int'
     item: 'Item'
     itemId: 'Int'
     quantity: 'Int'
@@ -206,7 +210,7 @@ export interface NexusGenArgTypes {
       title: string; // String!
     }
     deleteCartItem: { // args
-      itemId: number; // Int!
+      id: number; // Int!
     }
     deleteItem: { // args
       id: number; // Int!

@@ -3,6 +3,7 @@
 
 
 type CartItem {
+  id: Int!
   item: Item!
   itemId: Int!
   quantity: Int!
@@ -16,6 +17,7 @@ input CartItemItemIdUserIdCompoundUniqueInput {
 }
 
 input CartItemWhereUniqueInput {
+  id: Int
   itemId_userId: CartItemItemIdUserIdCompoundUniqueInput
 }
 
@@ -43,7 +45,7 @@ input ItemWhereUniqueInput {
 type Mutation {
   addToCart(itemId: Int!): CartItem
   createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
-  deleteCartItem(itemId: Int!): CartItem!
+  deleteCartItem(id: Int!): CartItem!
   deleteItem(id: Int!): Item!
   requestPasswordReset(email: String!): SucessMessage
   resetPassword(confirmPassword: String!, password: String!, resetToken: String!): User

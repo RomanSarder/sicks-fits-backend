@@ -32,6 +32,7 @@ model Item {
 }
 
 model CartItem {
+  id          Int     @unique @default(autoincrement())
   quantity    Int     @default(1)
   item        Item    @relation(fields: [itemId], references: [id])
   itemId      Int 
