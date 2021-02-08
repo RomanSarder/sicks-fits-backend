@@ -1,4 +1,4 @@
-import { extendType, nonNull, objectType, stringArg } from "nexus";
+import { extendType, list, nonNull, objectType, stringArg } from "nexus";
 import { Context } from "src/context";
 import stripe from "../../lib/stripe"
 import formatMoney from "../../lib/formatMoney";
@@ -10,6 +10,7 @@ export const Order = objectType({
         t.model.total()
         t.model.items()
         t.model.user()
+        t.model.userId()
         t.model.charge()
         t.string('label', {
             resolve (order) {
@@ -17,6 +18,26 @@ export const Order = objectType({
             }
         })
     }
+})
+
+export const OrderQueries = extendType({
+    type: 'Query',
+    definition(t) {
+        t.crud.order()
+        t.field('allOrders', {
+            type: list(nonNull(Order)),
+            async resolve(_root, _args, ctx: Context) {
+                const { prisma, req } = ctx;
+                const { userId } = req
+
+                return prisma.order.findMany({
+                    where: {
+                        userId
+                    }
+                })
+            }
+        })
+    },
 })
 
 export const OrderMutations = extendType({

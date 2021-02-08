@@ -81,6 +81,7 @@ export interface NexusGenObjects {
     charge: string; // String!
     id: number; // Int!
     total: number; // Int!
+    userId: number; // Int!
   }
   OrderItem: { // root type
     description: string; // String!
@@ -151,6 +152,7 @@ export interface NexusGenFieldTypes {
     label: string | null; // String
     total: number; // Int!
     user: NexusGenRootTypes['User']; // User!
+    userId: number; // Int!
   }
   OrderItem: { // field return type
     description: string; // String!
@@ -162,11 +164,13 @@ export interface NexusGenFieldTypes {
     title: string; // String!
   }
   Query: { // field return type
+    allOrders: NexusGenRootTypes['Order'][] | null; // [Order!]
     getMyCart: Array<NexusGenRootTypes['CartItem'] | null> | null; // [CartItem]
     item: NexusGenRootTypes['Item'] | null; // Item
     items: NexusGenRootTypes['Item'][]; // [Item!]!
     itemsCount: number; // Int!
     me: NexusGenRootTypes['User'] | null; // User
+    order: NexusGenRootTypes['Order'] | null; // Order
     searchItems: NexusGenRootTypes['Item'][] | null; // [Item!]
     user: NexusGenRootTypes['User'] | null; // User
   }
@@ -222,6 +226,7 @@ export interface NexusGenFieldTypeNames {
     label: 'String'
     total: 'Int'
     user: 'User'
+    userId: 'Int'
   }
   OrderItem: { // field return type name
     description: 'String'
@@ -233,11 +238,13 @@ export interface NexusGenFieldTypeNames {
     title: 'String'
   }
   Query: { // field return type name
+    allOrders: 'Order'
     getMyCart: 'CartItem'
     item: 'Item'
     items: 'Item'
     itemsCount: 'Int'
     me: 'User'
+    order: 'Order'
     searchItems: 'Item'
     user: 'User'
   }
@@ -318,6 +325,9 @@ export interface NexusGenArgTypes {
       search?: string | null; // String
       skip?: number | null; // Int
       take?: number | null; // Int
+    }
+    order: { // args
+      where: NexusGenInputs['OrderWhereUniqueInput']; // OrderWhereUniqueInput!
     }
     searchItems: { // args
       searchString: string; // String!

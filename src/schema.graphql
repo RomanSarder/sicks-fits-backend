@@ -63,6 +63,7 @@ type Order {
   label: String
   total: Int!
   user: User!
+  userId: Int!
 }
 
 enum OrderBy {
@@ -98,11 +99,13 @@ enum Permission {
 }
 
 type Query {
+  allOrders: [Order!]
   getMyCart: [CartItem]
   item(where: ItemWhereUniqueInput!): Item
   items(orderBy: ItemOrderByInput, search: String, skip: Int, take: Int): [Item!]!
   itemsCount: Int!
   me: User
+  order(where: OrderWhereUniqueInput!): Order
   searchItems(searchString: String!): [Item!]
   user(where: UserWhereUniqueInput!): User
 }
