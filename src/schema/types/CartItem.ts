@@ -1,4 +1,4 @@
-import { intArg, mutationType, nonNull, objectType, stringArg } from "nexus";
+import { extendType, intArg, mutationType, nonNull, objectType, stringArg } from "nexus";
 import { Context } from "src/context";
 
 export const CartItem = objectType({
@@ -13,7 +13,8 @@ export const CartItem = objectType({
     }
 })
 
-export const CartMutations = mutationType({
+export const CartMutations = extendType({
+    type: 'Mutation',
     definition(t) {
         t.field('addToCart', {
             type: CartItem,

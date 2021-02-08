@@ -11,7 +11,6 @@ server.express.use(cookieParser())
 
 server.express.use((req, res, next) => {
     const { token } = req.cookies;
-
     try {
         if (token && token !== null) {
             const decoded: DecodedUserToken = jwt.verify(token, process.env.APP_SECRET as string) as DecodedUserToken;

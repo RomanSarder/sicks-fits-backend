@@ -9,5 +9,6 @@ export const OrderItem = objectType({
         t.model.image()
         t.model.quantity()
         t.model.order()
+        t.model.price()
     }
 })

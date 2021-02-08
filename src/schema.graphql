@@ -44,6 +44,7 @@ input ItemWhereUniqueInput {
 
 type Mutation {
   addToCart(itemId: Int!): CartItem
+  checkout(token: String!): Order!
   createItem(description: String!, image: String, largeImage: String, price: Int!, title: String!): Item!
   deleteCartItem(id: Int!): CartItem!
   deleteItem(id: Int!): Item!
@@ -59,6 +60,7 @@ type Order {
   charge: String!
   id: Int!
   items(after: OrderItemWhereUniqueInput, before: OrderItemWhereUniqueInput, first: Int, last: Int): [OrderItem!]!
+  label: String
   total: Int!
   user: User!
 }
@@ -73,6 +75,7 @@ type OrderItem {
   id: Int!
   image: String!
   order: Order!
+  price: Int!
   quantity: Int!
   title: String!
 }

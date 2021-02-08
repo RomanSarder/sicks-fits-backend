@@ -86,6 +86,7 @@ export interface NexusGenObjects {
     description: string; // String!
     id: number; // Int!
     image: string; // String!
+    price: number; // Int!
     quantity: number; // Int!
     title: string; // String!
   }
@@ -132,6 +133,7 @@ export interface NexusGenFieldTypes {
   }
   Mutation: { // field return type
     addToCart: NexusGenRootTypes['CartItem'] | null; // CartItem
+    checkout: NexusGenRootTypes['Order']; // Order!
     createItem: NexusGenRootTypes['Item']; // Item!
     deleteCartItem: NexusGenRootTypes['CartItem']; // CartItem!
     deleteItem: NexusGenRootTypes['Item']; // Item!
@@ -146,6 +148,7 @@ export interface NexusGenFieldTypes {
     charge: string; // String!
     id: number; // Int!
     items: NexusGenRootTypes['OrderItem'][]; // [OrderItem!]!
+    label: string | null; // String
     total: number; // Int!
     user: NexusGenRootTypes['User']; // User!
   }
@@ -154,6 +157,7 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     image: string; // String!
     order: NexusGenRootTypes['Order']; // Order!
+    price: number; // Int!
     quantity: number; // Int!
     title: string; // String!
   }
@@ -200,6 +204,7 @@ export interface NexusGenFieldTypeNames {
   }
   Mutation: { // field return type name
     addToCart: 'CartItem'
+    checkout: 'Order'
     createItem: 'Item'
     deleteCartItem: 'CartItem'
     deleteItem: 'Item'
@@ -214,6 +219,7 @@ export interface NexusGenFieldTypeNames {
     charge: 'String'
     id: 'Int'
     items: 'OrderItem'
+    label: 'String'
     total: 'Int'
     user: 'User'
   }
@@ -222,6 +228,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     image: 'String'
     order: 'Order'
+    price: 'Int'
     quantity: 'Int'
     title: 'String'
   }
@@ -251,6 +258,9 @@ export interface NexusGenArgTypes {
   Mutation: {
     addToCart: { // args
       itemId: number; // Int!
+    }
+    checkout: { // args
+      token: string; // String!
     }
     createItem: { // args
       description: string; // String!
