@@ -94,6 +94,17 @@ export const OrderMutations = extendType({
                     }
                 })
 
+                await prisma.user.update({
+                    where: {
+                        id: userId
+                    },
+                    data: {
+                        cart: {
+                            deleteMany: {}
+                        }
+                    }
+                })
+
                 return order
             }
         })
