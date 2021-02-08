@@ -31,6 +31,26 @@ model Item {
   // user: User
 }
 
+model Order {
+  id          Int     @id @default(autoincrement())
+  total       Int
+  items       OrderItem[]
+  userId      Int
+  user        User    @relation(fields: [userId], references: [id])
+  charge      String
+}
+
+model OrderItem {
+  id          Int @id @default(autoincrement())
+  title       String
+  description String
+  image       String
+  price       Int
+  quantity    Int
+  order       Order   @relation(fields: [orderId], references: [id])
+  orderId     Int     
+}
+
 model CartItem {
   id          Int     @unique @default(autoincrement())
   quantity    Int     @default(1)
@@ -50,4 +70,5 @@ model User {
   resetTokenExpiry Float?
   permissions Permission[]
   cart        CartItem[]
+  orders      Order[]
 }

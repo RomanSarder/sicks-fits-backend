@@ -55,9 +55,34 @@ type Mutation {
   updateItem(description: String, id: Int!, image: String, largeImage: String, price: Int, title: String): Item!
 }
 
+type Order {
+  charge: String!
+  id: Int!
+  items(after: OrderItemWhereUniqueInput, before: OrderItemWhereUniqueInput, first: Int, last: Int): [OrderItem!]!
+  total: Int!
+  user: User!
+}
+
 enum OrderBy {
   asc
   desc
+}
+
+type OrderItem {
+  description: String!
+  id: Int!
+  image: String!
+  order: Order!
+  quantity: Int!
+  title: String!
+}
+
+input OrderItemWhereUniqueInput {
+  id: Int
+}
+
+input OrderWhereUniqueInput {
+  id: Int
 }
 
 enum Permission {
@@ -88,6 +113,7 @@ type User {
   email: String!
   id: Int!
   name: String!
+  orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
   permissions: [Permission!]!
 }
 

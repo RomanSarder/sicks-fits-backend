@@ -8,7 +8,6 @@ import { Context } from "src/context";
 import { SuccessMessage } from './common';
 import { sendPasswordResetEmail } from '../../lib/email'
 import { CartItem } from './CartItem'
-import { User } from '@prisma/client'
 
 function setToken (userId: number, res: Response) {
     const token = jwt.sign({ userId }, process.env.APP_SECRET as string);
@@ -38,6 +37,7 @@ export const User = objectType({
         t.model.name()
         t.model.permissions()
         t.model.cart()
+        t.model.orders()
     }
 })
 
