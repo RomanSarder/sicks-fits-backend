@@ -103,16 +103,9 @@ type Query {
   user(where: UserWhereUniqueInput!): User
 }
 
-type Role {
-  assignedTo(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
-  canManageCart: Boolean!
-  canManageOrders: Boolean!
-  canManageProducts: Boolean!
-  canManageRoles: Boolean!
-  canManageUsers: Boolean!
-  canSeeOtherUsers: Boolean!
-  id: Int!
-  name: String!
+enum Role {
+  ADMIN
+  USER
 }
 
 type SucessMessage {

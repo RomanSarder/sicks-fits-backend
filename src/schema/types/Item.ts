@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { objectType, nonNull, stringArg, intArg } from 'nexus'
 import { arg, enumType, extendType, inputObjectType, list } from 'nexus/dist/core'
-import { isSignedIn, permissions, rules } from '../../access'
+import { rules } from '../../access'
 import { Context } from '../../context'
 
 export const OrderByEnum = enumType({
@@ -114,7 +114,7 @@ export const ItemMutation = extendType({
             async resolve(_root, args, ctx: Context) {
                 const { prisma, req: { userId }} = ctx
 
-                if (!isSignedIn(ctx)) {
+                if (!userId) {
                     throw new Error('Sorry! You need to be logged in to create items')
                 }
 
@@ -170,7 +170,6 @@ export const ItemMutation = extendType({
                 const filter = { where: { id: args.id } }
                 
                 const canDeleteItem = await rules.canManageProducts(ctx, args.id)
-                console.log(canDeleteItem)
                 if (!canDeleteItem) {
                     throw new Error('You can only delete items that you own')
                 }

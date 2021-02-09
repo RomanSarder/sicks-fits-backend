@@ -11,6 +11,11 @@ generator client {
   previewFeatures = ["createMany"]
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model Item {
   id          Int     @id @default(autoincrement())
   title       String
@@ -63,18 +68,5 @@ model User {
   resetTokenExpiry Float?
   cart        CartItem[]
   orders      Order[]
-  roleId      Int     
-  role        Role     @relation(fields: [roleId], references: [id])
-}
-
-model Role {
-  id          Int      @id @default(autoincrement())
-  name        String
-  assignedTo  User[]
-  canManageProducts  Boolean  @default(false)
-  canSeeOtherUsers  Boolean  @default(false)
-  canManageUsers  Boolean  @default(false)
-  canManageRoles  Boolean  @default(false)
-  canManageCart  Boolean  @default(false)
-  canManageOrders  Boolean  @default(false)
+  role        Role    @default(USER)
 }

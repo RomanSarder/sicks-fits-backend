@@ -8,35 +8,10 @@ import { Context } from "src/context";
 import { SuccessMessage } from './common';
 import { sendPasswordResetEmail } from '../../lib/email'
 import { CartItem } from './CartItem'
-import { Role, User as UserType } from '@prisma/client'
+import { User as UserType } from '@prisma/client'
 
-export type UserWithRole = UserType & { role: Role } 
-export interface EncodedUserRole {
-    name: string,
-    permissions: {
-        canManageCart: boolean
-        canManageOrders: boolean
-        canManageProducts: boolean
-        canManageRoles: boolean
-        canManageUsers: boolean
-        canSeeOtherUsers: boolean,
-    }
-}
-
-function setToken (user: UserWithRole, res: Response) {
-    const userDataToEncode: EncodedUserRole = {
-        name: user.role.name,
-        permissions: {
-            canManageCart: user.role.canManageCart,
-            canManageOrders: user.role.canManageOrders,
-            canManageProducts: user.role.canManageProducts,
-            canManageRoles: user.role.canManageRoles,
-            canManageUsers: user.role.canManageUsers,
-            canSeeOtherUsers: user.role.canSeeOtherUsers
-        }
-    }
-
-    const token = jwt.sign({ role: userDataToEncode, userId: user.id }, process.env.APP_SECRET as string);
+function setToken (user: UserType, res: Response) {
+    const token = jwt.sign({ role: user.role, userId: user.id }, process.env.APP_SECRET as string);
     res.cookie('token', token, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
@@ -132,16 +107,7 @@ export const UserMutation = extendType({
                         email: lowercasedEmail,
                         password: hashedPassword,
                         name,
-                        role: {
-                            /* Default user role */
-                            connect: {
-                                id: 2
-                            }
-                        }
                     },
-                    include: {
-                        role: true
-                    }
                 })
 
                 setToken(user, res)
@@ -165,9 +131,6 @@ export const UserMutation = extendType({
                     where: {
                         email: lowercasedEmail,
                     },
-                    include: {
-                        role: true
-                    }
                 })
 
                 if (user === null) {
@@ -205,9 +168,6 @@ export const UserMutation = extendType({
                     where: {
                         email: email.toLowerCase()
                     },
-                    include: {
-                        role: true
-                    }
                 })
 
                 if (user === null) {
@@ -257,9 +217,6 @@ export const UserMutation = extendType({
                             gt: Date.now() - 3600000
                         },
                     },
-                    include: {
-                        role: true
-                    }
                 })
 
                 if (user === null) {

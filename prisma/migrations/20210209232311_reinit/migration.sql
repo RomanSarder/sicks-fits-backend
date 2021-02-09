@@ -1,5 +1,5 @@
 -- CreateEnum
-CREATE TYPE "Permission" AS ENUM ('CanManageProducts', 'CanSeeOtherUsers', 'CanManageUsers', 'CanManageRoles', 'CanManageCart', 'CanManageOrders');
+CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
 -- CreateTable
 CREATE TABLE "Item" (
@@ -11,6 +11,7 @@ CREATE TABLE "Item" (
     "price" INTEGER NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3),
+    "ownerId" INTEGER NOT NULL,
 
     PRIMARY KEY ("id")
 );
@@ -56,17 +57,8 @@ CREATE TABLE "User" (
     "password" TEXT NOT NULL,
     "resetToken" TEXT,
     "resetTokenExpiry" DECIMAL(65,30),
-    "permissions" "Permission"[],
     "roleId" INTEGER NOT NULL,
-
-    PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Role" (
-    "id" SERIAL NOT NULL,
-    "name" TEXT NOT NULL,
-    "permissions" "Permission"[],
+    "role" "Role" NOT NULL DEFAULT E'USER',
 
     PRIMARY KEY ("id")
 );
@@ -76,6 +68,9 @@ CREATE UNIQUE INDEX "CartItem.id_unique" ON "CartItem"("id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "User.email_unique" ON "User"("email");
+
+-- AddForeignKey
+ALTER TABLE "Item" ADD FOREIGN KEY ("ownerId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Order" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -88,6 +83,3 @@ ALTER TABLE "CartItem" ADD FOREIGN KEY ("itemId") REFERENCES "Item"("id") ON DEL
 
 -- AddForeignKey
 ALTER TABLE "CartItem" ADD FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "User" ADD FOREIGN KEY ("roleId") REFERENCES "Role"("id") ON DELETE CASCADE ON UPDATE CASCADE;
