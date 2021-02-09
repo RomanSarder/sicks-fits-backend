@@ -9,6 +9,7 @@ declare namespace Express {
                 canManageProducts: boolean
                 canManageRoles: boolean
                 canManageUsers: boolean
+                canSeeOtherUsers: boolean
             }
         }
     }

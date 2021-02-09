@@ -1,6 +1,7 @@
-import { ItemOrderByInput, Prisma } from '@prisma/client'
-import { objectType, queryType, mutationType, nonNull, stringArg, intArg } from 'nexus'
+import { Prisma } from '@prisma/client'
+import { objectType, nonNull, stringArg, intArg } from 'nexus'
 import { arg, enumType, extendType, inputObjectType, list } from 'nexus/dist/core'
+import { isSignedIn } from '../../access'
 import { Context } from '../../context'
 
 export const OrderByEnum = enumType({
@@ -28,6 +29,8 @@ export const Item = objectType({
         t.model.price()
         t.model.createdAt()
         t.model.updatedAt()
+        t.model.owner()
+        t.model.ownerId()
     }
 })
 
@@ -48,7 +51,7 @@ export const ItemQuery = extendType({
             },
             async resolve(_root, args, ctx: Context) {
                 const prisma = ctx.prisma
-                const req = ctx.req
+
                 const queryOptions = {
                     skip: args.skip as number | undefined,
                     take: args.take as number | undefined,
@@ -109,9 +112,19 @@ export const ItemMutation = extendType({
                 largeImage: stringArg()
             },
             async resolve(_root, args, ctx: Context) {
-                const prisma = ctx.prisma
+                const { prisma, req: { userId }} = ctx
+
+                if (!isSignedIn(ctx)) {
+                    throw new Error('Sorry! You need to be logged in to create items')
+                }
+
                 return await prisma.item.create({ data: {
                     ...args,
+                    owner: {
+                        connect: {
+                            id: userId
+                        }
+                    }
                 } })
             }
         })

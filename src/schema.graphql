@@ -29,6 +29,8 @@ type Item {
   id: Int!
   image: String
   largeImage: String
+  owner: User!
+  ownerId: Int!
   price: Int!
   title: String!
   updatedAt: DateTime

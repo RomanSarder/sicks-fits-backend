@@ -71,6 +71,7 @@ export interface NexusGenObjects {
     id: number; // Int!
     image?: string | null; // String
     largeImage?: string | null; // String
+    ownerId: number; // Int!
     price: number; // Int!
     title: string; // String!
     updatedAt?: NexusGenScalars['DateTime'] | null; // DateTime
@@ -136,6 +137,8 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     image: string | null; // String
     largeImage: string | null; // String
+    owner: NexusGenRootTypes['User']; // User!
+    ownerId: number; // Int!
     price: number; // Int!
     title: string; // String!
     updatedAt: NexusGenScalars['DateTime'] | null; // DateTime
@@ -221,6 +224,8 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     image: 'String'
     largeImage: 'String'
+    owner: 'User'
+    ownerId: 'Int'
     price: 'Int'
     title: 'String'
     updatedAt: 'DateTime'

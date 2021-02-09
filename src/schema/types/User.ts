@@ -19,6 +19,7 @@ export interface EncodedUserRole {
         canManageProducts: boolean
         canManageRoles: boolean
         canManageUsers: boolean
+        canSeeOtherUsers: boolean,
     }
 }
 
@@ -31,6 +32,7 @@ function setToken (user: UserWithRole, res: Response) {
             canManageProducts: user.role.canManageOrders,
             canManageRoles: user.role.canManageRoles,
             canManageUsers: user.role.canManageUsers,
+            canSeeOtherUsers: user.role.canSeeOtherUsers
         }
     }
 
