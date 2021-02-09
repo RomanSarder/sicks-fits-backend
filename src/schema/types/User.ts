@@ -8,26 +8,38 @@ import { Context } from "src/context";
 import { SuccessMessage } from './common';
 import { sendPasswordResetEmail } from '../../lib/email'
 import { CartItem } from './CartItem'
+import { Role, User as UserType } from '@prisma/client'
 
-function setToken (userId: number, res: Response) {
-    const token = jwt.sign({ userId }, process.env.APP_SECRET as string);
+export type UserWithRole = UserType & { role: Role } 
+export interface EncodedUserRole {
+    name: string,
+    permissions: {
+        canManageCart: boolean
+        canManageOrders: boolean
+        canManageProducts: boolean
+        canManageRoles: boolean
+        canManageUsers: boolean
+    }
+}
+
+function setToken (user: UserWithRole, res: Response) {
+    const userDataToEncode: EncodedUserRole = {
+        name: user.role.name,
+        permissions: {
+            canManageCart: user.role.canManageCart,
+            canManageOrders: user.role.canManageOrders,
+            canManageProducts: user.role.canManageOrders,
+            canManageRoles: user.role.canManageRoles,
+            canManageUsers: user.role.canManageUsers,
+        }
+    }
+
+    const token = jwt.sign({ role: userDataToEncode, userId: user.id }, process.env.APP_SECRET as string);
     res.cookie('token', token, {
         httpOnly: true,
         maxAge: 1000 * 60 * 60 * 24 * 365 // 1 year cookie
     })
 }
-
-export const PermissionEnum = enumType({
-    name: 'Permission',
-    members: [
-        'ADMIN',
-        'USER',
-        'ITEMCREATE',
-        'ITEMDELETE',
-        'ITEMUPDATE',
-        'PERMISSIONUPDATE'
-    ],
-})
 
 export const User = objectType({
     name: 'User',
@@ -35,9 +47,9 @@ export const User = objectType({
         t.model.id()
         t.model.email()
         t.model.name()
-        t.model.permissions()
         t.model.cart()
         t.model.orders()
+        t.model.role()
     }
 })
 
@@ -118,11 +130,19 @@ export const UserMutation = extendType({
                         email: lowercasedEmail,
                         password: hashedPassword,
                         name,
-                        permissions: ['USER']
+                        role: {
+                            /* Default user role */
+                            connect: {
+                                id: 2
+                            }
+                        }
+                    },
+                    include: {
+                        role: true
                     }
                 })
 
-                setToken(user.id, res)
+                setToken(user, res)
 
                 return user
             }
@@ -142,6 +162,9 @@ export const UserMutation = extendType({
                 const user = await prisma.user.findFirst({
                     where: {
                         email: lowercasedEmail,
+                    },
+                    include: {
+                        role: true
                     }
                 })
 
@@ -155,7 +178,7 @@ export const UserMutation = extendType({
                     throw new Error('Invalid password')
                 }
 
-                setToken(user.id, res)
+                setToken(user, res)
 
                 return user
             }
@@ -179,6 +202,9 @@ export const UserMutation = extendType({
                 const user = await ctx.prisma.user.findFirst({
                     where: {
                         email: email.toLowerCase()
+                    },
+                    include: {
+                        role: true
                     }
                 })
 
@@ -228,6 +254,9 @@ export const UserMutation = extendType({
                         resetTokenExpiry: {
                             gt: Date.now() - 3600000
                         },
+                    },
+                    include: {
+                        role: true
                     }
                 })
 
@@ -246,7 +275,7 @@ export const UserMutation = extendType({
                         resetTokenExpiry: null
                     }
                 })
-                setToken(user.id, res)
+                setToken(user, res)
 
                 return newUser
             }

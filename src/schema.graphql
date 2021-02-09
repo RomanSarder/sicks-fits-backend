@@ -89,15 +89,6 @@ input OrderWhereUniqueInput {
   id: Int
 }
 
-enum Permission {
-  ADMIN
-  ITEMCREATE
-  ITEMDELETE
-  ITEMUPDATE
-  PERMISSIONUPDATE
-  USER
-}
-
 type Query {
   allOrders: [Order!]
   getMyCart: [CartItem]
@@ -110,6 +101,18 @@ type Query {
   user(where: UserWhereUniqueInput!): User
 }
 
+type Role {
+  assignedTo(after: UserWhereUniqueInput, before: UserWhereUniqueInput, first: Int, last: Int): [User!]!
+  canManageCart: Boolean!
+  canManageOrders: Boolean!
+  canManageProducts: Boolean!
+  canManageRoles: Boolean!
+  canManageUsers: Boolean!
+  canSeeOtherUsers: Boolean!
+  id: Int!
+  name: String!
+}
+
 type SucessMessage {
   message: String
 }
@@ -120,7 +123,7 @@ type User {
   id: Int!
   name: String!
   orders(after: OrderWhereUniqueInput, before: OrderWhereUniqueInput, first: Int, last: Int): [Order!]!
-  permissions: [Permission!]!
+  role: Role!
 }
 
 input UserWhereUniqueInput {

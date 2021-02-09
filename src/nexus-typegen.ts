@@ -47,7 +47,6 @@ export interface NexusGenInputs {
 
 export interface NexusGenEnums {
   OrderBy: "asc" | "desc"
-  Permission: "ADMIN" | "ITEMCREATE" | "ITEMDELETE" | "ITEMUPDATE" | "PERMISSIONUPDATE" | "USER"
 }
 
 export interface NexusGenScalars {
@@ -92,6 +91,16 @@ export interface NexusGenObjects {
     title: string; // String!
   }
   Query: {};
+  Role: { // root type
+    canManageCart: boolean; // Boolean!
+    canManageOrders: boolean; // Boolean!
+    canManageProducts: boolean; // Boolean!
+    canManageRoles: boolean; // Boolean!
+    canManageUsers: boolean; // Boolean!
+    canSeeOtherUsers: boolean; // Boolean!
+    id: number; // Int!
+    name: string; // String!
+  }
   SucessMessage: { // root type
     message?: string | null; // String
   }
@@ -99,7 +108,6 @@ export interface NexusGenObjects {
     email: string; // String!
     id: number; // Int!
     name: string; // String!
-    permissions: NexusGenEnums['Permission'][]; // [Permission!]!
   }
 }
 
@@ -174,6 +182,17 @@ export interface NexusGenFieldTypes {
     searchItems: NexusGenRootTypes['Item'][] | null; // [Item!]
     user: NexusGenRootTypes['User'] | null; // User
   }
+  Role: { // field return type
+    assignedTo: NexusGenRootTypes['User'][]; // [User!]!
+    canManageCart: boolean; // Boolean!
+    canManageOrders: boolean; // Boolean!
+    canManageProducts: boolean; // Boolean!
+    canManageRoles: boolean; // Boolean!
+    canManageUsers: boolean; // Boolean!
+    canSeeOtherUsers: boolean; // Boolean!
+    id: number; // Int!
+    name: string; // String!
+  }
   SucessMessage: { // field return type
     message: string | null; // String
   }
@@ -183,7 +202,7 @@ export interface NexusGenFieldTypes {
     id: number; // Int!
     name: string; // String!
     orders: NexusGenRootTypes['Order'][]; // [Order!]!
-    permissions: NexusGenEnums['Permission'][]; // [Permission!]!
+    role: NexusGenRootTypes['Role']; // Role!
   }
 }
 
@@ -248,6 +267,17 @@ export interface NexusGenFieldTypeNames {
     searchItems: 'Item'
     user: 'User'
   }
+  Role: { // field return type name
+    assignedTo: 'User'
+    canManageCart: 'Boolean'
+    canManageOrders: 'Boolean'
+    canManageProducts: 'Boolean'
+    canManageRoles: 'Boolean'
+    canManageUsers: 'Boolean'
+    canSeeOtherUsers: 'Boolean'
+    id: 'Int'
+    name: 'String'
+  }
   SucessMessage: { // field return type name
     message: 'String'
   }
@@ -257,7 +287,7 @@ export interface NexusGenFieldTypeNames {
     id: 'Int'
     name: 'String'
     orders: 'Order'
-    permissions: 'Permission'
+    role: 'Role'
   }
 }
 
@@ -334,6 +364,14 @@ export interface NexusGenArgTypes {
     }
     user: { // args
       where: NexusGenInputs['UserWhereUniqueInput']; // UserWhereUniqueInput!
+    }
+  }
+  Role: {
+    assignedTo: { // args
+      after?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
+      before?: NexusGenInputs['UserWhereUniqueInput'] | null; // UserWhereUniqueInput
+      first?: number | null; // Int
+      last?: number | null; // Int
     }
   }
   User: {
