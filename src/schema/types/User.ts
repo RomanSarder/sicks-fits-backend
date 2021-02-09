@@ -29,7 +29,7 @@ function setToken (user: UserWithRole, res: Response) {
         permissions: {
             canManageCart: user.role.canManageCart,
             canManageOrders: user.role.canManageOrders,
-            canManageProducts: user.role.canManageOrders,
+            canManageProducts: user.role.canManageProducts,
             canManageRoles: user.role.canManageRoles,
             canManageUsers: user.role.canManageUsers,
             canSeeOtherUsers: user.role.canSeeOtherUsers

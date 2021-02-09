@@ -26,17 +26,23 @@ export const permissions = {
 }
 
 export const rules = {
-    canManageProducts ({ req }: Context) {
-        const permissionToManageProducts = permissions.canManageProducts(req)
+    async canManageProducts (ctx: Context, id: number) {
+        const { prisma, req } = ctx
         
-        if (permissionToManageProducts) {
+        if (permissions.canManageProducts(ctx)) {
             return true
-        } else {
-            return {
-                where: {
-                    
-                }
-            }
         }
+
+        const item = await prisma.item.findUnique({
+            where: {
+                id
+            }
+        })
+
+        if (item === null) {
+            throw new Error('Item is not found')
+        }
+
+        return item.ownerId === req.userId
     }
 }

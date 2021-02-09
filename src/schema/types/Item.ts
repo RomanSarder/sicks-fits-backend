@@ -1,7 +1,7 @@
 import { Prisma } from '@prisma/client'
 import { objectType, nonNull, stringArg, intArg } from 'nexus'
 import { arg, enumType, extendType, inputObjectType, list } from 'nexus/dist/core'
-import { isSignedIn } from '../../access'
+import { isSignedIn, permissions, rules } from '../../access'
 import { Context } from '../../context'
 
 export const OrderByEnum = enumType({
@@ -140,9 +140,15 @@ export const ItemMutation = extendType({
             },
             async resolve(_root, args, ctx: Context) {
                 const prisma = ctx.prisma
+                const canUpdateItem = await rules.canManageProducts(ctx, args.id)
+
+                if (!canUpdateItem) {
+                    throw new Error('You can only update items that you own')
+                }
+
                 const updatedItem = await prisma.item.update({
                     where: {
-                        id: args.id
+                        id: args.id,
                     },
                     data: {
                         title: args.title as string,
@@ -162,12 +168,14 @@ export const ItemMutation = extendType({
             async resolve(_root, args, ctx: Context) {
                 const prisma = ctx.prisma
                 const filter = { where: { id: args.id } }
-                const item = await prisma.item.findUnique(filter)
-                if (item === null) {
-                    throw new Error('Item is not found')
+                
+                const canDeleteItem = await rules.canManageProducts(ctx, args.id)
+                console.log(canDeleteItem)
+                if (!canDeleteItem) {
+                    throw new Error('You can only delete items that you own')
                 }
-                await prisma.item.delete(filter)
-                return item;
+                
+                return await prisma.item.delete(filter)
             }
         })
     }
